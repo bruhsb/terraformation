@@ -1,0 +1,12 @@
+---
+image: brunosb/semantic-delivery-gitlab:latest
+
+stages:
+  - release
+
+publish:
+  stage: release
+  script:
+    - semantic-delivery-gitlab --token $GITLAB_TOKEN
+  only:
+    - master

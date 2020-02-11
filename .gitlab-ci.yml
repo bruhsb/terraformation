@@ -1,12 +1,14 @@
----
-image: brunosb/semantic-delivery-gitlab:latest
-
 stages:
   - release
 
-publish:
+semantic_release:
   stage: release
+  image: node:10
+  variables:
+    GITLAB_TOKEN: $GITLAB_TOKEN
+  before_script:
+    - npm install -g semantic-release @semantic-release/gitlab-config
   script:
-    - semantic-delivery-gitlab --token $GITLAB_TOKEN
+    - semantic-release -e @semantic-release/gitlab-config
   only:
     - master

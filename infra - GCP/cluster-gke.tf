@@ -54,10 +54,22 @@ module "kubernetes" {
 
   node_pools = [
     {
-      name               = "stable"
-      machine_type       = "n1-standard-1"
+      name               = "${var.project_id}-pool"
+      machine_type       = "n1-standard-100"
+      min_count          = 0
+      max_count          = 4
+      disk_size_gb       = 30
+      disk_type          = "pd-standard"
+      auto_repair        = true
+      auto_upgrade       = true
+      preemptible        = true
+      initial_node_count = 1
+    },
+    { # Pool for infrastructure services.
+      name               = "infra-nodes"
+      machine_type       = "n1-standard-4"
       min_count          = 1
-      max_count          = 6
+      max_count          = 3
       disk_size_gb       = 30
       disk_type          = "pd-standard"
       auto_repair        = true
@@ -68,33 +80,44 @@ module "kubernetes" {
   ]
 
   node_pools_oauth_scopes = {
-    all = []
-    stable = [
+    all = [
       "https://www.googleapis.com/auth/cloud-platform",
     ]
+    infra-nodes = []
+  }
+
+  node_pools_metadata = {
+    all         = {}
+    infra-nodes = {}
   }
 
   node_pools_labels = {
-    all    = {}
-    stable = {}
+    all = {}
+    infra-nodes = {
+      role = "infra"
+    }
   }
 
-  # node_pools_taints = {
-  #   all    = []
-  #   stable = []
-  # }
+  # Used only module_beta' 
+  # See: > https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/pull/228
+  // node_pools_taints = {
+  //   all = []
 
-  node_pools_metadata = {
-    all    = {}
-    stable = {}
-  }
+  //   infra-nodes = [
+  //     {
+  //       key    = "infra-workloads"
+  //       value  = true
+  //       effect = "NO_SCHEDULE"
+  //     },
+  //   ]
+  // }
 
   node_pools_tags = {
     all = [
       "kubernetes",
       "default-allow-ssh",
     ]
-    stable = []
+    infra-nodes = []
   }
 }
 

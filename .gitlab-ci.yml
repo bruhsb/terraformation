@@ -35,6 +35,8 @@ plan:
   artifacts:
     paths:
       - planfile
+  only:
+    - master
 
 release:
   image: brunosb/semantic-delivery-gitlab:latest

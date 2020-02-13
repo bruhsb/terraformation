@@ -19,7 +19,7 @@ module "tiller" {
 
 module "kubernetes" {
   source  = "terraform-google-modules/kubernetes-engine/google"
-  version = "~> 6.0"
+  version = "~>7.0"
 
   providers = {
     google = google
@@ -55,7 +55,7 @@ module "kubernetes" {
   node_pools = [
     {
       name               = "${var.project_id}-pool"
-      machine_type       = "n1-standard-100"
+      machine_type       = "n1-standard-1"
       min_count          = 0
       max_count          = 4
       disk_size_gb       = 30

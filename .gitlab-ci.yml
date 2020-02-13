@@ -7,7 +7,7 @@ stages:
 publish:
   stage: release
   script:
-    - git pull --tags
+    - git fetch --tags -f
     - semantic-delivery-gitlab --token $GITLAB_TOKEN
   only:
     - master

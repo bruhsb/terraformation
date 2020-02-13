@@ -1,0 +1,37 @@
+vault:
+  # image:
+  #   tag: vault:1.0.0
+  googleKms:
+    keyRing: vault
+    cryptoKey: vault-unsealer
+    # region: us-east1
+    # project: k8slabs10
+  config:
+    ha:
+      enabled: false
+    ui:
+      enabled: true
+    replicaCount: 1
+    gcpServiceAccount:
+      existingSecret: vault-service-account
+    logLevel: trace
+    serviceAccount: vault
+    storageBucket: idwall-vault
+ldap: {}
+ingress:
+  enabled: true
+  annotations: 
+    kubernetes.io/ingress.class: internal
+    # external-dns.alpha.kubernetes.io/target: CNAME
+    # external-dns.alpha.kubernetes.io/ttl: "5"
+
+  labels: {}
+  ## Hosts must be provided if Ingress is enabled.
+  ##
+  hosts: 
+    - vault.idwall.space
+
+  tls: 
+   - secretName: ssl-idwall-space
+     hosts:
+     - vault.idwall.space

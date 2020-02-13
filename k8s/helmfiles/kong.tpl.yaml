@@ -1,0 +1,55 @@
+# Default values for Kong's Helm Chart.
+# Declare variables to be passed into your templates.
+#
+
+image:
+  pullPolicy: Always
+
+# Specify Kong admin and proxy services configurations
+admin:
+  ingress:
+    enabled: true
+    hosts:
+    - kongadmin.com
+    # Map of ingress annotations.
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "false"
+    # Ingress path.
+    path: /
+
+enterprise:
+  enabled: false
+
+# update strategy
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: "100%"
+    maxUnavailable: "0%"
+
+env:
+  pg_host: ${env_pg_host} # postgresql.postgresql.svc.cluster.local
+  pg_port: ${env_pg_port} # 5432
+  pg_user: ${env_pg_user} # "postgres"
+  pg_password: ${env_pg_password} # "postgres"
+  pg_database: ${env_pg_database} # "postgres"
+  database: "postgres"
+
+  # TRUSTED_IPS: "0.0.0.0/0"
+
+# Kong pod count
+replicaCount: ${replicaCount}
+
+# Cassandra chart configs
+cassandra:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+ingressController:
+  enabled: true
+  nodeSelector: {}
+    # role: infra
+

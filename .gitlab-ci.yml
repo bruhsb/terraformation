@@ -25,9 +25,6 @@ validate:
   stage: validate
   script:
     - terraform validate
-  rules:
-    - if: tag
-      when: never
 
 plan:
   stage: plan
@@ -38,9 +35,8 @@ plan:
   artifacts:
     paths:
       - planfile
-  rules:
-    - if: master
-      when: always
+  only:
+    - master
 
 release:
   image: brunosb/semantic-delivery-gitlab:latest
@@ -49,9 +45,9 @@ release:
   stage: apply
   script:
     - semantic-delivery-gitlab --token $GITLAB_TOKEN
-  rules:
-    - if: master
-      when: manual
+  when: manual
+  only:
+    - master
 
 apply:
   stage: apply
@@ -59,6 +55,6 @@ apply:
     - terraform apply -input=false "planfile"
   dependencies:
     - plan
-  rules:
-    - if: master
-      when: manual
+  when: manual
+  only:
+    - master

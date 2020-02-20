@@ -41,3 +41,13 @@ output "gke_ca" {
 output "gke_command-line_access" {
   value = "gcloud container clusters get-credentials ${var.project_id} --zone ${var.zone} --project ${var.gcp_project_id}"
 }
+
+output "internal_ingress_ip" {
+  value     = google_compute_address.internal_ingress.address
+  sensitive = true
+}
+
+output "external_ingress_ip" {
+  value     = google_compute_address.external_ingress.address
+  sensitive = true
+}

@@ -27,6 +27,7 @@ code_review:
     - echo "plan"
   only:
     - merge_request
+    - master
 
 release:
   image: brunosb/semantic-delivery-gitlab:latest

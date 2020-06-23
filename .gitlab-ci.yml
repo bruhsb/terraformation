@@ -25,6 +25,8 @@ validate:
   stage: validate
   script:
     - terraform validate
+  except:
+    - tags
 
 plan:
   stage: plan

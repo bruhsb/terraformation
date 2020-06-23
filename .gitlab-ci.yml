@@ -14,49 +14,27 @@ before_script:
   - cd infra\ -\ GCP/
   - mkdir -p creds
   - echo $SERVICEACCOUNT | base64 -d > ./creds/serviceaccount.json
-  - terraform init
+  - echo "init"
 
 stages:
-  - validate
-  - plan
-  - apply
+  - code_review
+  - tag_release
 
-validate:
-  stage: validate
+code_review:
+  stage: code_review
   script:
-    - terraform validate
-  except:
-    - tags
-
-plan:
-  stage: plan
-  script:
-    - terraform plan
-  dependencies:
-    - validate
-  artifacts:
-    paths:
-      - planfile
+    - echo "validate"
+    - echo "plan"
   only:
-    - master
+    - merge_request
 
 release:
   image: brunosb/semantic-delivery-gitlab:latest
   before_script:
     - git fetch --tags -f
-  stage: apply
+  stage: tag_release
   script:
     - semantic-delivery-gitlab --token $GITLAB_TOKEN
-  when: manual
-  only:
-    - master
-
-apply:
-  stage: apply
-  script:
-    - terraform apply -input=false --auto-approve
-  dependencies:
-    - plan
   when: manual
   only:
     - master

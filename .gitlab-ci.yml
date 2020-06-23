@@ -14,7 +14,7 @@ before_script:
   - cd infra\ -\ GCP/
   - mkdir -p creds
   - echo $SERVICEACCOUNT | base64 -d > ./creds/serviceaccount.json
-  - terraform init
+  - echo "init"
 
 stages:
   - code_review
@@ -23,8 +23,8 @@ stages:
 code_review:
   stage: code_review
   script:
-    - terraform validate
-    - terraform plan
+    - echo "validate"
+    - echo "plan"
   only:
     - merge_request
 
